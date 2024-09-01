@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FanushMobileApp.MainPage"
+             Title="Job Postings">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Activity Indicator for loading state -->
+        <ActivityIndicator x:Name="activityIndicator" 
+                           IsRunning="False" 
+                           IsVisible="False" 
+                           Color="{StaticResource Primary}" 
+                           WidthRequest="100" 
+                           HeightRequest="100"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+
+        <!-- CollectionView to display job postings -->
+        <CollectionView x:Name="jobPostingData" 
+                        Margin="10" 
+                        SelectionMode="Single"
+                        ItemsSource="{Binding JobPostings}">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border HeightRequest="200" 
+                            Padding="10" 
+                            BackgroundColor="{StaticResource Secondary}" 
+                            Stroke="{StaticResource Primary}" 
+                            StrokeThickness="2.5" 
+                            StrokeShape="RoundRectangle 15" 
+                            Margin="0,0,0,10">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="Normal"/>
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                        <Setter Property="Stroke" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="jobPostingIdLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="titleLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="descriptionLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <!--<Setter TargetName="isInternalLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="isActiveLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="postingDateLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="applicationDeadlineLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="startDateLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="cityLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="contactEmailLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="contactPhoneLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="salaryInformationLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="requirementsLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="jobTypeLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="experienceRequiredLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="educationRequiredLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="skillsRequiredLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="benefitsOfferedLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="workScheduleLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>
+                                        <Setter TargetName="isRemoteWorkLabel" Property="Label.TextColor" Value="{StaticResource Secondary}"/>-->
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <VerticalStackLayout Spacing="5" Margin="5" VerticalOptions="Center">
+
+                            <Label x:Name="jobPostingIdLabel" 
+                                   Text="{Binding JobPostingId}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="titleLabel" 
+                                   Text="{Binding Title}" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="descriptionLabel" 
+                                   Text="{Binding Description}" 
+                                   FontSize="14" 
+                                   TextColor="{StaticResource Primary}" 
+                                   LineBreakMode="TailTruncation" 
+                                   MaxLines="2" />
+
+                            <!--<Label x:Name="isInternalLabel" 
+                                   Text="{Binding IsInternal, StringFormat='Internal: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="isActiveLabel" 
+                                   Text="{Binding IsActive, StringFormat='Active: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="postingDateLabel" 
+                                   Text="{Binding PostingDate, StringFormat='Posted on {0:MMM dd, yyyy}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="applicationDeadlineLabel" 
+                                   Text="{Binding ApplicationDeadline, StringFormat='Apply by {0:MMM dd, yyyy}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="startDateLabel" 
+                                   Text="{Binding StartDate, StringFormat='Start Date: {0:MMM dd, yyyy}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="cityLabel" 
+                                   Text="{Binding City}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="contactEmailLabel" 
+                                   Text="{Binding ContactEmail, StringFormat='Email: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="contactPhoneLabel" 
+                                   Text="{Binding ContactPhone, StringFormat='Phone: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="salaryInformationLabel" 
+                                   Text="{Binding SalaryInformation, StringFormat='Salary: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="requirementsLabel" 
+                                   Text="{Binding Requirements}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="jobTypeLabel" 
+                                   Text="{Binding JobType, StringFormat='Job Type: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="experienceRequiredLabel" 
+                                   Text="{Binding ExperienceRequired, StringFormat='Experience Required: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="educationRequiredLabel" 
+                                   Text="{Binding EducationRequired, StringFormat='Education Required: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="skillsRequiredLabel" 
+                                   Text="{Binding SkillsRequired}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="benefitsOfferedLabel" 
+                                   Text="{Binding BenefitsOffered, StringFormat='Benefits: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="workScheduleLabel" 
+                                   Text="{Binding WorkSchedule, StringFormat='Work Schedule: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />
+
+                            <Label x:Name="isRemoteWorkLabel" 
+                                   Text="{Binding IsRemoteWork, StringFormat='Remote Work: {0}'}" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource Primary}" />-->
+
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Button for adding a new job posting -->
+        <Button Grid.Row="1" 
+                x:Name="btnAddJobPosting" 
+                Text="Add Job Posting" 
+                Margin="5" 
+                Clicked="btnAddJobPosting_Clicked"/>
+
+        <!-- Grid for Edit and Delete buttons -->
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnEditJobPosting" 
+                    Text="Edit Job Posting" 
+                    Margin="5" 
+                    Grid.Column="0" 
+                    Clicked="btnEditJobPosting_Clicked"/>
+
+            <Button x:Name="btnDeleteJobPosting" 
+                    Text="Delete Job Posting" 
+                    Margin="5" 
+                    Grid.Column="1" 
+                    Clicked="btnDeleteJobPosting_Clicked"/>
+        </Grid>
+    </Grid>
+</ContentPage>
